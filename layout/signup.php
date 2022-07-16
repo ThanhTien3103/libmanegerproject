@@ -111,7 +111,7 @@ if ($_SESSION["signinstatus"] != 1&&$_SERVER["REQUEST_METHOD"] == "POST") {
     }
     else {
       ?>
-              <script>
+                <script>
                   alert('you have some warning in your information');
                 </script>
 <?php

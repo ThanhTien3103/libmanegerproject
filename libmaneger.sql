@@ -237,7 +237,7 @@ CREATE OR REPLACE FUNCTION add_transactions() RETURNS TRIGGER
 AS $$
 BEGIN
         IF 
-            (SELECT available from book where book.book_id = NEW.book_id) > 0 AND (select status from user_info where NEW.userinfo_id = user_info.userinfo_id) = TRUE AND (select count(transaction_id) from (select user_info.userinfo_id,transaction_id,transaction.status from user_info LEFT JOIN transaction ON user_info.userinfo_id = transaction.userinfo_id) as foo WHERE foo.status = false group by userinfo_id having userinfo_id = NEW.userinfo_id ) < 5
+            (SELECT available from book where book.book_id = NEW.book_id) > 0 AND (select count(transaction_id) from (select user_info.userinfo_id,transaction_id,transaction.status from user_info LEFT JOIN transaction ON user_info.userinfo_id = transaction.userinfo_id WHERE user_info.status = true) as foo WHERE (foo.status = false or foo.status is null) group by userinfo_id having userinfo_id = NEW.userinfo_id ) < 5
         THEN 
            UPDATE book SET available = available - 1 WHERE book.book_id = NEW.book_id;
            
